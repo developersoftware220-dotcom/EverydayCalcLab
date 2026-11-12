@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free online everyday calculators. Calculate age, percentages, discounts, dates, units and savings easily.">
+<meta name="theme-color" content="#6755e8">
+<title>EverydayCalcLab - Free Online Calculators</title>
+<style>
+:root{--primary:#6755e8;--dark:#20213a;--muted:#777991;--bg:#f7f7fc;--white:#fff;--border:#e9e8f2}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--dark)}
+header{background:white;border-bottom:1px solid var(--border);padding:17px 6%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+.logo{font-size:21px;font-weight:800;color:var(--primary)}
+.logo span{color:var(--dark)}
+header small{color:var(--muted)}
+.hero{text-align:center;padding:48px 18px 32px;background:linear-gradient(135deg,#eeeaff,#fdf4ff)}
+.hero h1{font-size:clamp(28px,5vw,43px);margin:0 0 12px}
+.hero h1 span{color:var(--primary)}
+.hero p{color:var(--muted);line-height:1.6;max-width:600px;margin:auto}
+.search{display:block;width:min(500px,90%);margin:24px auto 0;padding:14px 18px;border:1px solid var(--border);border-radius:12px;font-size:15px;outline-color:var(--primary)}
+.container{max-width:1100px;margin:32px auto;padding:0 18px}
+.section-title{font-size:23px;margin-bottom:7px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:13px}
+.tool{background:white;border:1px solid var(--border);border-radius:15px;padding:17px 12px;text-align:left;cursor:pointer;transition:.2s}
+.tool:hover,.tool.active{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 7px 20px #6755e81a}
+.tool .emoji{font-size:26px}
+.tool h3{font-size:15px;margin:10px 0 5px}
+.tool p{font-size:12px;color:var(--muted);margin:0;line-height:1.5}
+.panel{background:white;border:1px solid var(--border);border-radius:18px;padding:24px;margin-top:25px;box-shadow:0 5px 20px #25204408}
+.panel h2{margin:0 0 8px;font-size:22px}
+.panel>p{color:var(--muted);font-size:14px;margin:0 0 22px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:15px}
+label{display:block;font-size:13px;font-weight:700;margin-bottom:8px}
+input,select{width:100%;padding:13px;border:1px solid var(--border);border-radius:10px;font-size:15px;background:white;color:var(--dark);outline-color:var(--primary)}
+button{border:0;background:var(--primary);color:white;padding:13px 22px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-top:18px}
+button:hover{opacity:.9}
+.result{display:none;background:#f0edff;border:1px solid #ded8ff;padding:17px;border-radius:12px;margin-top:18px;line-height:1.7;color:#40328f}
+.result strong{font-size:20px}
+footer{text-align:center;padding:30px 15px;color:var(--muted);font-size:13px;margin-top:35px;border-top:1px solid var(--border)}
+.hidden{display:none}
+@media(max-width:500px){header{padding:15px 4%}.hero{padding:38px 15px}.panel{padding:18px}.grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">Everyday<span>CalcLab</span> ✦</div>
+ <small>Free everyday tools</small>
+</header>
+
+<section class="hero">
+ <h1>Smart Calculators for <span>Everyday Life</span></h1>
+ <p>Simple, fast and free online calculators to help you solve everyday calculations in seconds.</p>
+ <input class="search" id="search" placeholder="Search calculators..." oninput="filterTools()">
+</section>
+
+<main class="container">
+ <h2 class="section-title">Explore Calculators</h2>
+ <p class="sub">Choose a tool to get started. No signup required.</p>
+
+ <div class="grid" id="tools">
+  <button class="tool active" data-name="age calculator" onclick="showTool('age',this)"><div class="emoji">🎂</div><h3>Age Calculator</h3><p>Calculate your exact age</p></button>
+  <button class="tool" data-name="percentage calculator" onclick="showTool('percent',this)"><div class="emoji">📊</div><h3>Percentage</h3><p>Calculate percentages easily</p></button>
+  <button class="tool" data-name="discount calculator" onclick="showTool('discount',this)"><div class="emoji">🏷️</div><h3>Discount</h3><p>Find sale prices and savings</p></button>
+  <button class="tool" data-name="date calculator" onclick="showTool('date',this)"><div class="emoji">📅</div><h3>Date Calculator</h3><p>Calculate days between dates</p></button>
+  <button class="tool" data-name="unit converter" onclick="showTool('unit',this)"><div class="emoji">⚖️</div><h3>Unit Converter</h3><p>Convert common measurements</p></button>
+  <button class="tool" data-name="savings calculator" onclick="showTool('savings',this)"><div class="emoji">💰</div><h3>Savings Calculator</h3><p>Plan your savings goal</p></button>
+ </div>
+
+ <section class="panel" id="age">
+  <h2>🎂 Age Calculator</h2><p>Find your age in years, months and days.</p>
+  <div class="fields"><div><label>Date of Birth</label><input type="date" id="dob"></div><div><label>Calculate Age On</label><input type="date" id="ageOn"></div></div>
+  <button onclick="calcAge()">Calculate Age</button><div class="result" id="ageResult"></div>
+ </section>
+
+ <section class="panel hidden" id="percent">
+  <h2>📊 Percentage Calculator</h2><p>Find what percentage one number is of another.</p>
+  <div class="fields"><div><label>What is the percentage?</label><input type="number" id="p1" placeholder="e.g. 20"></div><div><label>Of this number</label><input type="number" id="p2" placeholder="e.g. 500"></div></div>
+  <button onclick="calcPercent()">Calculate</button><div class="result" id="percentResult"></div>
+ </section>
+
+ <section class="panel hidden" id="discount">
+  <h2>🏷️ Discount Calculator</h2><p>Calculate the final price after a discount.</p>
+  <div class="fields"><div><label>Original Price</label><input type="number" id="price" min="0" placeholder="e.g. 100"></div><div><label>Discount (%)</label><input type="number" id="off" min="0" max="100" placeholder="e.g. 20"></div></div>
+  <button onclick="calcDiscount()">Calculate Price</button><div class="result" id="discountResult"></div>
+ </section>
+
+ <section class="panel hidden" id="date">
+  <h2>📅 Date Calculator</h2><p>Find the number of days between two dates.</p>
+  <div class="fields"><div><label>Start Date</label><input type="date" id="startDate"></div><div><label>End Date</label><input type="date" id="endDate"></div></div>
+  <button onclick="calcDate()">Calculate Difference</button><div class="result" id="dateResult"></div>
+ </section>
+
+ <section class="panel hidden" id="unit">
+  <h2>⚖️ Unit Converter</h2><p>Convert length, weight and temperature.</p>
+  <div class="fields">
+   <div><label>Category</label><select id="category" onchange="updateUnits()"><option value="length">Length</option><option value="weight">Weight</option><option value="temp">Temperature</option></select></div>
+   <div><label>Value</label><input type="number" id="unitValue" placeholder="Enter value"></div>
+   <div><label>From</label><select id="fromUnit"></select></div>
+   <div><label>To</label><select id="toUnit"></select></div>
+  </div>
+  <button onclick="calcUnit()">Convert</button><div class="result" id="unitResult"></div>
+ </section>
+
+ <section class="panel hidden" id="savings">
+  <h2>💰 Savings Calculator</h2><p>Estimate how much you can save over time.</p>
+  <div class="fields"><div><label>Initial Savings</label><input type="number" id="initial" min="0" placeholder="e.g. 100"></div><div><label>Save Each Month</label><input type="number" id="monthly" min="0" placeholder="e.g. 50"></div><div><label>Number of Months</label><input type="number" id="months" min="1" placeholder="e.g. 12"></div></div>
+  <button onclick="calcSavings()">Calculate Savings</button><div class="result" id="savingsResult"></div>
+ </section>
+</main>
+
+<footer>© <span id="year"></span> EverydayCalcLab · Free tools for everyday life</footer>
+
+<script>
+const ids=['age','percent','discount','date','unit','savings'];
+function showTool(id,btn){
+ ids.forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id));
+ document.querySelectorAll('.tool').forEach(x=>x.classList.remove('active'));
+ if(btn)btn.classList.add('active');
+ document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+}
+function filterTools(){
+ const q=document.getElementById('search').value.toLowerCase();
+ document.querySelectorAll('.tool').forEach(t=>t.style.display=t.dataset.name.includes(q)?'block':'none');
+}
+function output(id,html){
+ const el=document.getElementById(id);el.innerHTML=html;el.style.display='block';
+}
+function num(id){return Number(document.getElementById(id).value)}
+function validDate(v){return v && !isNaN(new Date(v+'T00:00:00').getTime())}
+function calcAge(){
+ const a=document.getElementById('dob').value,b=document.getElementById('ageOn').value;
+ if(!validDate(a)||!validDate(b)){alert('Please select both dates.');return}
+ let start=new Date(a+'T00:00:00'),end=new Date(b+'T00:00:00');
+ if(start>end){alert('Date of birth cannot be after the calculation date.');return}
+ let y=end.getFullYear()-start.getFullYear(),m=end.getMonth()-start.getMonth(),d=end.getDate()-start.getDate();
+ if(d<0){m--;d+=new Date(end.getFullYear(),end.getMonth(),0).getDate()}
+ if(m<0){y--;m+=12}
+ output('ageResult',`Your age is:<br><strong>${y} years, ${m} months, ${d} days</strong>`);
+}
+function calcPercent(){
+ let a=num('p1'),b=num('p2');
+ if(!Number.isFinite(a)||!Number.isFinite(b)||b===0){alert('Enter valid numbers. The second number cannot be zero.');return}
+ output('percentResult',`Result:<br><strong>${(a/b*100).toFixed(2)}%</strong>`);
+}
+function calcDiscount(){
+ let p=num('price'),d=num('off');
+ if(!Number.isFinite(p)||!Number.isFinite(d)||p<0||d<0||d>100){alert('Enter a valid price and discount from 0 to 100.');return}
+ let save=p*d/100;
+ output('discountResult',`Final price: <strong>${(p-save).toFixed(2)}</strong><br>You save: ${save.toFixed(2)}`);
+}
+function calcDate(){
+ let a=document.getElementById('startDate').value,b=document.getElementById('endDate').value;
+ if(!validDate(a)||!validDate(b)){alert('Please select both dates.');return}
+ let days=Math.abs(Date.parse(b+'T00:00:00')-Date.parse(a+'T00:00:00'))/86400000;
+ output('dateResult',`Difference:<br><strong>${days.toLocaleString()} days</strong>`);
+}
+const units={
+ length:{Meter:1,Kilometer:1000,Centimeter:.01,Millimeter:.001,Mile:1609.344,Foot:.3048,Inch:.0254},
+ weight:{Kilogram:1,Gram:.001,Milligram:.000001,Pound:.45359237,Ounce:.0283495},
+ temp:{Celsius:'c',Fahrenheit:'f',Kelvin:'k'}
+};
+function updateUnits(){
+ let u=Object.keys(units[document.getElementById('category').value]);
+ ['fromUnit','toUnit'].forEach((id,i)=>{
+  document.getElementById(id).innerHTML=u.map(x=>`<option ${i===1&&x===u[1]?'selected':''}>${x}</option>`).join('');
+ });
+}
+function calcUnit(){
+ let v=num('unitValue'),cat=document.getElementById('category').value;
+ let from=document.getElementById('fromUnit').value,to=document.getElementById('toUnit').value;
+ if(!Number.isFinite(v)){alert('Enter a valid value.');return}
+ let result;
+ if(cat==='temp'){
+  let c=from==='Celsius'?v:from==='Fahrenheit'?(v-32)*5/9:v-273.15;
+  result=to==='Celsius'?c:to==='Fahrenheit'?c*9/5+32:c+273.15;
+ }else result=v*units[cat][from]/units[cat][to];
+ output('unitResult',`Converted value:<br><strong>${result.toLocaleString(undefined,{maximumFractionDigits:8})} ${to}</strong>`);
+}
+function calcSavings(){
+ let a=num('initial'),m=num('monthly'),n=num('months');
+ if(!Number.isFinite(a)||!Number.isFinite(m)||!Number.isFinite(n)||a<0||m<0||n<=0||!Number.isInteger(n)){alert('Enter valid amounts and a whole number of months.');return}
+ output('savingsResult',`Estimated total savings:<br><strong>${(a+m*n).toLocaleString(undefined,{maximumFractionDigits:2})}</strong><br>Starting amount + monthly savings. Interest is not included.`);
+}
+document.getElementById('year').textContent=new Date().getFullYear();
+const today=new Date().toISOString().slice(0,10);
+document.getElementById('ageOn').value=today;
+document.getElementById('endDate').value=today;
+updateUnits();
+</script>
+</body>
+  </html>
+   
